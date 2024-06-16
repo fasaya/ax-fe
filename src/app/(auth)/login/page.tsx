@@ -20,11 +20,12 @@ const LoginPage = () => {
                 body: JSON.stringify(data),
             });
 
-            if (!response.ok) {
-                throw new Error('Invalid email or password');
-            }
-
             const responseData = await response.json();
+
+            if (!response.ok) {
+                alert(responseData?.message)
+                throw new Error(responseData?.message);
+            }
 
             // Logic to set cookie
             // Set the expiration time to 1 hour from the current time
