@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 function isAuth() {
     const token = Cookies.get('userToken') ?? cookies().get('userToken')?.value
 
+    // Verify JWT:
     // try {
     //     const decoded = jwt.verify(token, SECRET_KEY);
     //     return decoded;
@@ -14,7 +15,15 @@ function isAuth() {
     // }
 
     return token;
-
 }
 
-export default isAuth
+function getToken() {
+    const token = Cookies.get('userToken') ?? cookies().get('userToken')?.value
+
+    // Verify JWT:
+    // ...
+
+    return token;
+}
+
+export { isAuth, getToken }

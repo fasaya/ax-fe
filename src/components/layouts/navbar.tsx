@@ -1,4 +1,4 @@
-import isAuth from "@/utils/helpers/auth"
+import { isAuth } from "@/utils/helpers/auth"
 import Link from "next/link"
 import React from 'react'
 
@@ -9,8 +9,6 @@ export default function Navbar() {
         { name: 'Supplier', href: '/admin/supplier' },
         { name: 'Transaction', href: '/admin/transaction' },
     ]
-    console.log("isAuth()", isAuth());
-
 
     return (
         <header className="bg-gray-800">
