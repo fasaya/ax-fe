@@ -27,10 +27,8 @@ const SupplierPage = () => {
 
     const { data, error, isLoading } = useSWR(API_V1_URL + route + "?" + queryParams + "&page=" + page, fetcherWithAuth)
 
-    // console.log(data?.data);
-
     let suppliers = data?.data?.data;
-    let totalPage = data?.data?.meta?.from ?? 1 as number;
+    let totalPage = data?.data?.meta?.last_page ?? 1 as number;
 
     const handleSearch = () => {
         navigate(route + "?search=" + searchInput)
