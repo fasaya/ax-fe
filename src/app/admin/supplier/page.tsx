@@ -26,7 +26,7 @@ const SupplierPage = () => {
 
     const route = '/admin/supplier'
     const queryParams = new URLSearchParams({
-        // per_age: perPage.toString(),
+        per_page: perPage.toString(),
         search
     }).toString()
 
