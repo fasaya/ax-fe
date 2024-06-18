@@ -11,6 +11,7 @@ import { navigate } from "@/utils/actions/navigate";
 import axios from "axios";
 import Cookies from 'js-cookie';
 import { useRouter } from "next/navigation";
+import Datepicker from "react-tailwindcss-datepicker";
 
 const TransactionPage = () => {
     const searchParams = useSearchParams()
@@ -18,6 +19,10 @@ const TransactionPage = () => {
     const search = searchParams.get('search') ?? ""
 
     const [searchInput, setSearchInput] = useState(search);
+    const [dateRange, setDateRange] = useState({
+        startDate: new Date(),
+        endDate: new Date(),
+    });
 
     const router = useRouter();
 
@@ -43,6 +48,12 @@ const TransactionPage = () => {
         setSearchInput(event.target.value);
     };
 
+    const handleDateRangeChange = (newValue: any) => {
+        console.log("newValue:", newValue);
+        setDateRange(newValue);
+    }
+
+
     const handleDeleteWithReload = async (id: string) => {
         if (confirm('Are you sure you want to delete?')) {
             await axios
@@ -61,10 +72,56 @@ const TransactionPage = () => {
         }
     };
 
+    const handleExport = async () => {
+
+        const queryParams = new URLSearchParams({
+            start_date: dateRange.startDate ? dateRange.startDate.toISOString() : "",
+            end_date: dateRange.endDate ? dateRange.endDate.toISOString() : "",
+        }).toString()
+
+        try {
+            axios.get(API_V1_URL + "/admin/transaction/export?" + queryParams, {
+                responseType: 'blob',
+                headers: {
+                    'Authorization': "Bearer " + Cookies.get('userToken')
+                }
+            }).then(response => {
+                const url = window.URL.createObjectURL(response.data);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'transaction-export.xlsx');
+                document.body.appendChild(link);
+                link.click();
+            }).catch(function (error) {
+                console.error(error);
+            })
+        } catch (error) {
+            console.error('Download failed:', error);
+        }
+    };
+
     return (
         <main className="container mx-auto mt-12">
             <section className="m-5">
                 <h2 className="text-3xl mb-5 font-semibold">Transaction</h2>
+
+                <hr className="my-5" />
+
+                <div className="my-5 flex space-x-2">
+                    <div>
+                        <Datepicker
+                            primaryColor="blue"
+                            value={dateRange}
+                            onChange={handleDateRangeChange}
+                        />
+                    </div>
+                    <button onClick={() => handleExport()} className="text-white hover:bg-slate-700 h-full w-auto rounded-lg cursor-pointer px-4 bg-slate-800 py-2">
+                        <span className="m-auto font-medium">Export</span>
+                    </button>
+
+                </div>
+
+                <hr className="my-5" />
 
                 <div className="mb-5 flex justify-between">
                     <div>
@@ -77,10 +134,6 @@ const TransactionPage = () => {
                     </div>
 
                     <div className="space-x-2">
-                        <button className="bg-gray-200 text-gray-600 hover:text-gray-700 hover:bg-gray-300 h-full w-auto rounded cursor-pointer px-4">
-                            <span className="m-auto font-medium">Export</span>
-                        </button>
-
                         <Link href={route + "/create"}>
                             <button className="bg-gray-200 text-gray-600 hover:text-gray-700 hover:bg-gray-300 h-full w-auto rounded cursor-pointer px-4">
                                 <span className="m-auto font-medium">+ Create</span>
