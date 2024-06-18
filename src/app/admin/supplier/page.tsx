@@ -43,10 +43,22 @@ const SupplierPage = () => {
         setSearchInput(event.target.value);
     };
 
-    const handleDeleteWithReload = (id: string) => {
-        handleDeletion(id, () => {
-            router.push("/admin/supplier");
-        });
+    const handleDeleteWithReload = async (id: string) => {
+        if (confirm('Are you sure you want to delete?')) {
+            await axios
+                .delete(API_V1_URL + "/admin/supplier/" + id, {
+                    headers: {
+                        'Authorization': "Bearer " + Cookies.get('userToken')
+                    }
+                }).then(response => {
+                    if (response.status != 200) alert(response.data?.message)
+                    router.push("/admin/supplier");
+                    return response.data
+                }).catch(function (error) {
+                    alert("Failed to delete")
+                    console.error(error);
+                });
+        }
     };
 
     return (
@@ -163,23 +175,4 @@ const TableRows = (
         )}
     </>)
 }
-
-const handleDeletion = async (id: string, onSuccess: () => void) => {
-    if (confirm('Are you sure you want to delete?')) {
-        await axios
-            .delete(API_V1_URL + "/admin/supplier/" + id, {
-                headers: {
-                    'Authorization': "Bearer " + Cookies.get('userToken')
-                }
-            }).then(response => {
-                if (response.status != 200) alert(response.data?.message)
-                onSuccess();
-                return response.data
-            }).catch(function (error) {
-                alert("Failed to delete")
-                console.error(error);
-            });
-    }
-}
-
 export default SupplierPage
