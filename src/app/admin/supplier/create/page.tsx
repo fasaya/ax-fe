@@ -3,7 +3,6 @@ import { API_V1_URL } from "@/constant";
 import { navigate } from "@/utils/actions/navigate";
 import axios from "axios";
 import { useForm } from 'react-hook-form';
-import useSWR from "swr";
 import Cookies from 'js-cookie';
 
 const SupplierCreatePage = () => {
@@ -18,7 +17,12 @@ const SupplierCreatePage = () => {
                 }
             })
             .then(response => {
+                if (response.status != 200) {
+                    alert(response.data?.message)
+                }
+
                 navigate('/admin/supplier')
+
                 return response.data
             }).catch(function (error) {
                 alert(error.response.data.message)
