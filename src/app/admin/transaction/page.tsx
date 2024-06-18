@@ -97,6 +97,7 @@ const TransactionPage = () => {
                                 <th scope="col" className="px-6 py-4 font-medium text-gray-900">Transaction Date</th>
                                 <th scope="col" className="px-6 py-4 font-medium text-gray-900">Invoice</th>
                                 <th scope="col" className="px-6 py-4 font-medium text-gray-900">Product</th>
+                                <th scope="col" className="px-6 py-4 font-medium text-gray-900">Quantity</th>
                                 <th scope="col" className="px-6 py-4 font-medium text-gray-900">Total</th>
                                 <th scope="col" className="px-6 py-4 font-medium text-gray-900">Supplier</th>
                                 <th scope="col" className="px-6 py-4 font-medium text-gray-900">Created By</th>
@@ -105,7 +106,7 @@ const TransactionPage = () => {
                         </thead>
                         <tbody className="divide-y divide-gray-100 border-t border-gray-100">
                             {error || isLoading
-                                ? <RowBeforeLoad colSpan={8} error={error} isLoading={isLoading} />
+                                ? <RowBeforeLoad colSpan={9} error={error} isLoading={isLoading} />
                                 : <TableRows items={transactions} perPage={perPage} currentPage={currentPage} url={route} onDelete={handleDeleteWithReload} />
                             }
                         </tbody>
@@ -125,7 +126,7 @@ const TableRows = (
 ) => {
 
     if (items.length == 0) {
-        return <tr className="my-3"><td colSpan={8} className="text-center">No data</td></tr>
+        return <tr className="my-3"><td colSpan={9} className="text-center">No data</td></tr>
     }
 
     return (<>
@@ -138,6 +139,7 @@ const TableRows = (
                     <span className="font-medium">{item.product.code}</span>
                     <br />{item.product.name}
                 </td>
+                <td className="px-6 py-4">x {item.quantity}</td>
                 <td className="px-6 py-4">{item.total_price}</td>
                 <td className="px-6 py-4">
                     <span className="font-medium">{item.product.supplier.code}</span>

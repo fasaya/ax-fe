@@ -163,9 +163,6 @@ const TransactionCreatePage = () => {
                                 </div>
                             </div>
 
-                            <hr />
-
-
                         </div>
 
                         <div className="mt-6">
