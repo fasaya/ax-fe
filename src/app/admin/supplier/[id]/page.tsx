@@ -27,19 +27,13 @@ const SupplierDetailPage = ({ params }: {
                 }
             })
             .then(response => {
-                console.log("response", response);
-
-                if (response.status != 200) {
-                    alert(response.data?.message)
-                }
-
-                // navigate('/admin/supplier')
-
+                if (response.status != 200) alert(response.data?.message)
                 alert("Data successfully updated")
+                // navigate('/admin/supplier')
                 // return response.data
             }).catch(function (error) {
                 alert(error.response.data.message)
-                console.log('error', error);
+                console.error(error);
             })
     };
 

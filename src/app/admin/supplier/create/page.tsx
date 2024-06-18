@@ -9,7 +9,7 @@ const SupplierCreatePage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const onSubmit = async (formData: any) => {
-        let response = await axios
+        await axios
             .post(API_V1_URL + "/admin/supplier", JSON.stringify(formData), {
                 headers: {
                     'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ const SupplierCreatePage = () => {
                 return response.data
             }).catch(function (error) {
                 alert(error.response.data.message)
-                console.log('error', error);
+                console.error(error);
             })
     };
 

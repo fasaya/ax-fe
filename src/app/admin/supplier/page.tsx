@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import useSWR from "swr"
 import { fetcherWithAuth } from "@/services/fetcher";
 import { API_V1_URL } from "@/constant/index";
@@ -8,6 +8,9 @@ import { useSearchParams } from 'next/navigation'
 import Pagination from "@/components/elements/table/pagination";
 import RowBeforeLoad from "@/components/elements/table/rowBeforeLoad";
 import { navigate } from "@/utils/actions/navigate";
+import axios from "axios";
+import Cookies from 'js-cookie';
+import { useRouter } from "next/navigation";
 
 const SupplierPage = () => {
     const searchParams = useSearchParams()
@@ -15,6 +18,8 @@ const SupplierPage = () => {
     const search = searchParams.get('search') ?? ""
 
     const [searchInput, setSearchInput] = useState(search);
+
+    const router = useRouter();
 
     const currentPage = page ? parseInt(page) : 1 as number;
     const perPage = 10
@@ -34,9 +39,14 @@ const SupplierPage = () => {
         navigate(route + "?search=" + searchInput)
     }
 
-    // Handler for the input change
     const handleInputChange = (event: any) => {
         setSearchInput(event.target.value);
+    };
+
+    const handleDeleteWithReload = (id: string) => {
+        handleDeletion(id, () => {
+            router.push("/admin/supplier");
+        });
     };
 
     return (
@@ -78,7 +88,7 @@ const SupplierPage = () => {
                         <tbody className="divide-y divide-gray-100 border-t border-gray-100">
                             {error || isLoading
                                 ? <RowBeforeLoad colSpan={6} error={error} isLoading={isLoading} />
-                                : <TableRows items={suppliers} perPage={perPage} currentPage={currentPage} url={route} />
+                                : <TableRows items={suppliers} perPage={perPage} currentPage={currentPage} url={route} onDelete={handleDeleteWithReload} />
                             }
                         </tbody>
                     </table>
@@ -93,7 +103,7 @@ const SupplierPage = () => {
 }
 
 const TableRows = (
-    { items, perPage, currentPage, url }: { items: [], perPage: number, currentPage: number, url: string }
+    { items, perPage, currentPage, url, onDelete }: { items: [], perPage: number, currentPage: number, url: string, onDelete: (id: string) => void }
 ) => {
 
     if (items.length == 0) {
@@ -130,7 +140,7 @@ const TableRows = (
                                 />
                             </svg>
                         </Link>
-                        <button>
+                        <button onClick={() => onDelete(item.id)}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -152,6 +162,24 @@ const TableRows = (
             </tr>
         )}
     </>)
+}
+
+const handleDeletion = async (id: string, onSuccess: () => void) => {
+    if (confirm('Are you sure you want to delete?')) {
+        await axios
+            .delete(API_V1_URL + "/admin/supplier/" + id, {
+                headers: {
+                    'Authorization': "Bearer " + Cookies.get('userToken')
+                }
+            }).then(response => {
+                if (response.status != 200) alert(response.data?.message)
+                onSuccess();
+                return response.data
+            }).catch(function (error) {
+                alert("Failed to delete")
+                console.error(error);
+            });
+    }
 }
 
 export default SupplierPage
