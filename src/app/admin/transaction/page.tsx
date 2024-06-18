@@ -32,7 +32,9 @@ const TransactionPage = () => {
     const route = '/admin/transaction'
     const queryParams = new URLSearchParams({
         per_page: perPage.toString(),
-        search
+        search,
+        start_date: dateRange.startDate instanceof Date ? dateRange.startDate?.toISOString() : "",
+        end_date: dateRange.endDate instanceof Date ? dateRange.endDate?.toISOString() : "",
     }).toString()
 
     const { data, error, isLoading } = useSWR(API_V1_URL + route + "?" + queryParams + "&page=" + page, fetcherWithAuth)
@@ -75,8 +77,8 @@ const TransactionPage = () => {
     const handleExport = async () => {
 
         const queryParams = new URLSearchParams({
-            start_date: dateRange.startDate ? dateRange.startDate.toISOString() : "",
-            end_date: dateRange.endDate ? dateRange.endDate.toISOString() : "",
+            start_date: dateRange.startDate instanceof Date ? dateRange.startDate.toISOString() : "",
+            end_date: dateRange.endDate instanceof Date ? dateRange.endDate.toISOString() : "",
         }).toString()
 
         try {
@@ -105,24 +107,6 @@ const TransactionPage = () => {
             <section className="m-5">
                 <h2 className="text-3xl mb-5 font-semibold">Transaction</h2>
 
-                <hr className="my-5" />
-
-                <div className="my-5 flex space-x-2">
-                    <div>
-                        <Datepicker
-                            primaryColor="blue"
-                            value={dateRange}
-                            onChange={handleDateRangeChange}
-                        />
-                    </div>
-                    <button onClick={() => handleExport()} className="text-white hover:bg-slate-700 h-full w-auto rounded-lg cursor-pointer px-4 bg-slate-800 py-2">
-                        <span className="m-auto font-medium">Export</span>
-                    </button>
-
-                </div>
-
-                <hr className="my-5" />
-
                 <div className="mb-5 flex justify-between">
                     <div>
                         <div className="flex flex-row h-10 w-full rounded-lg relative bg-transparent">
@@ -133,9 +117,21 @@ const TransactionPage = () => {
                         </div>
                     </div>
 
-                    <div className="space-x-2">
+                    <div className="space-x-4 flex">
+                        <div className="flex space-x-2">
+                            <div>
+                                <Datepicker
+                                    primaryColor="blue"
+                                    value={dateRange}
+                                    onChange={handleDateRangeChange}
+                                />
+                            </div>
+                            <button onClick={() => handleExport()} className="text-white hover:bg-slate-700 h-full w-auto rounded-lg cursor-pointer px-4 bg-slate-800 py-2">
+                                <span className="m-auto font-medium">Export</span>
+                            </button>
+                        </div>
                         <Link href={route + "/create"}>
-                            <button className="bg-gray-200 text-gray-600 hover:text-gray-700 hover:bg-gray-300 h-full w-auto rounded cursor-pointer px-4">
+                            <button className="bg-gray-200 text-gray-600 hover:text-gray-700 hover:bg-gray-300 w-auto rounded cursor-pointer px-4 py-2">
                                 <span className="m-auto font-medium">+ Create</span>
                             </button>
                         </Link>
