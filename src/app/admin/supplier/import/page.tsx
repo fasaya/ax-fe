@@ -3,6 +3,7 @@ import { API_V1_URL } from "@/constant";
 import { navigate } from "@/utils/actions/navigate";
 import axios from "axios";
 import Cookies from 'js-cookie';
+import Link from "next/link";
 import { useState } from "react";
 
 export default function SupplierImportPage() {
@@ -69,19 +70,27 @@ export default function SupplierImportPage() {
             <section className="m-5">
                 <h2 className="text-3xl mb-5 font-semibold">Supplier - Import</h2>
 
+                <div className="my-6">
+                    <Link href="/admin/supplier"
+                        className="text-indigo-600 hover:text-indigo-500"
+                    >
+                        &lt; Back
+                    </Link>
+                </div>
+
                 <div className="mb-5">
-                    <button onClick={() => handleDownload()} className="text-indigo-600 hover:text-indigo-400">Download excel import template</button>
+                    <button onClick={() => handleDownload()} className="text-emerald-600 hover:text-emerald-400">Download excel import template</button>
                 </div>
 
                 <hr />
 
                 <div className="mt-5">
-                    <div className="text-2xl mb-3">Upload</div>
+                    <div className="text-2xl mb-5">Upload</div>
                     <div className="relative inline-block">
-                        <input type="file" className="file:absolute file:right-0 file:bg-gray-400 file:text-white file:border-0 file:py-1 file:px-3l text-gray-300 file:rounded" accept=".xlsx,.xls,.csv" onChange={handleFileChange} />
+                        <input type="file" className="file:absolute file:right-0 file:bg-gray-400 file:text-white file:border-0 file:py-0 file:px-3l text-gray-300 file:rounded" accept=".xlsx,.xls,.csv" onChange={handleFileChange} />
                     </div>
                     <br />
-                    <button onClick={handleUpload} className="bg-indigo-600 hover:bg-indigo-400 text-white px-2 py-1 rounded mt-3 shadow-x">Upload</button>
+                    <button onClick={handleUpload} className="bg-emerald-600 hover:bg-emerald-400 text-white px-2 py-1 rounded mt-3 shadow-x">Upload</button>
                     {message && <p>{message}</p>}
                 </div>
 

@@ -4,6 +4,7 @@ import { navigate } from "@/utils/actions/navigate";
 import axios from "axios";
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
+import Link from "next/link";
 
 const SupplierCreatePage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -34,6 +35,14 @@ const SupplierCreatePage = () => {
         <main className="container mx-auto mt-12" >
             <section className="m-5">
                 <h2 className="text-3xl mb-5 font-semibold">Supplier - Create</h2>
+
+                <div className="my-6">
+                    <Link href="/admin/supplier"
+                        className="text-indigo-600 hover:text-indigo-500"
+                    >
+                        &lt; Back
+                    </Link>
+                </div>
 
                 <div className="mt-5 sm:w-full">
                     <form className="" onSubmit={handleSubmit(onSubmit)}>
