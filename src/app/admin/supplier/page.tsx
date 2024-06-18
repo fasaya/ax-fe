@@ -76,10 +76,16 @@ const SupplierPage = () => {
                         </div>
                     </div>
 
-                    <div className="ml-3">
+                    <div className="space-x-2">
+                        <Link href={route + "/import"}>
+                            <button className="bg-gray-200 text-gray-600 hover:text-gray-700 hover:bg-gray-300 h-full w-auto rounded cursor-pointer px-4">
+                                <span className="m-auto font-medium">Import</span>
+                            </button>
+                        </Link>
+
                         <Link href={route + "/create"}>
                             <button className="bg-gray-200 text-gray-600 hover:text-gray-700 hover:bg-gray-300 h-full w-auto rounded cursor-pointer px-4">
-                                <span className="m-auto font-medium">Create</span>
+                                <span className="m-auto font-medium">+ Create</span>
                             </button>
                         </Link>
                     </div>
